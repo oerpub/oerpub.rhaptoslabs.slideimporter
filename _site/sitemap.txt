@@ -1,0 +1,12 @@
+
+http://oerpub.github.com/oerpub.rhaptoslabs.slideimporter//categories.html
+http://oerpub.github.com/oerpub.rhaptoslabs.slideimporter//index.html
+http://oerpub.github.com/oerpub.rhaptoslabs.slideimporter//pages.html
+http://oerpub.github.com/oerpub.rhaptoslabs.slideimporter//about.html
+http://oerpub.github.com/oerpub.rhaptoslabs.slideimporter//tags.html
+http://oerpub.github.com/oerpub.rhaptoslabs.slideimporter//sitemap.txt
+http://oerpub.github.com/oerpub.rhaptoslabs.slideimporter//atom.xml
+http://oerpub.github.com/oerpub.rhaptoslabs.slideimporter//index.html
+http://oerpub.github.com/oerpub.rhaptoslabs.slideimporter//archive.html
+
+http://oerpub.github.com/oerpub.rhaptoslabs.slideimporter//2012/04/27/hello-connexions

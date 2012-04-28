@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+ 
+ <title>Slide Importer Client using the OERPub publishing API</title>
+ <link href="http://oerpub.github.com/oerpub.rhaptoslabs.slideimporter//atom.xml" rel="self"/>
+ <link href="http://oerpub.github.com/oerpub.rhaptoslabs.slideimporter/"/>
+ <updated>2012-04-29T01:31:37+05:30</updated>
+ <id>http://oerpub.github.com/oerpub.rhaptoslabs.slideimporter/</id>
+ <author>
+   <name>Saket Chopudhary</name>
+   <email>saketkc@gmail.com</email>
+ </author>
+
+ 
+ <entry>
+   <title>Hello Connexions! </title>
+   <link href="http://oerpub.github.com/oerpub.rhaptoslabs.slideimporter//2012/04/27/hello-connexions"/>
+   <updated>2012-04-27T00:00:00+05:30</updated>
+   <id>http://oerpub.github.com/oerpub.rhaptoslabs.slideimporter//2012/04/27/hello-connexions</id>
+   <content type="html"></content>
+ </entry>
+ 
+ 
+</feed>
