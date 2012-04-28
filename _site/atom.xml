@@ -4,7 +4,7 @@
  <title>Slide Importer Client using the OERPub publishing API</title>
  <link href="http://oerpub.github.com/oerpub.rhaptoslabs.slideimporter//atom.xml" rel="self"/>
  <link href="http://oerpub.github.com/oerpub.rhaptoslabs.slideimporter/"/>
- <updated>2012-04-29T01:31:37+05:30</updated>
+ <updated>2012-04-29T01:58:04+05:30</updated>
  <id>http://oerpub.github.com/oerpub.rhaptoslabs.slideimporter/</id>
  <author>
    <name>Saket Chopudhary</name>
@@ -17,7 +17,9 @@
    <link href="http://oerpub.github.com/oerpub.rhaptoslabs.slideimporter//2012/04/27/hello-connexions"/>
    <updated>2012-04-27T00:00:00+05:30</updated>
    <id>http://oerpub.github.com/oerpub.rhaptoslabs.slideimporter//2012/04/27/hello-connexions</id>
-   <content type="html"></content>
+   <content type="html">&lt;p&gt;This is my first blog post or GSoC 2012. I would like to thank my mentors Kathi and Marvin for helping me throughout the process of proposal submission, guiding me at each step .&lt;/p&gt;
+
+&lt;p&gt;I plan to build a web client to import slides into Connexions and upload them to a service like SlideShare or Google Docs to render them as embeds. The client should be able to create a module template with introductory paragraphs and should be uploaded to Connexions using the publishing API. Slides should be printable and should be compatible to mobile/tablet views.&lt;/p&gt;</content>
  </entry>
  
  
