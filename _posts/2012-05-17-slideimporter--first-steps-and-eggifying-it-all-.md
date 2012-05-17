@@ -42,7 +42,7 @@ More on Python eggs can be read at <http://peak.telecommunity.com/DevCenter/Pyth
 	
 The next step was to include my code in the buildout, integrating it with rest of swordpushweb/  
 1. I created a new branch on the swordpushweb-buildout repo : *git checkout -b gsoc2012*  
-2. Added in the <eggs> section the name of my repo:  
+2. Added in the [eggs] section the name of my repo:  
 	eggs =
     pyramid
     oerpub.rhaptoslabs.swordpushweb
