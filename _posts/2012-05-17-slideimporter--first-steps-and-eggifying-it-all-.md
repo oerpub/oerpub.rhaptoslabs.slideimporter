@@ -14,15 +14,15 @@ dependecies  may not be just Python eggs.
 In short it acts like an importer for all the egg. Si once you do a buiild out (I will be explaining this steps shortly) the 
 files that come up in the **bin** directory will have a path defined something like  this
   
-import sys  
-sys.path[0:0] = [  
-     '/some/thing1.egg',  
-          # and other things  
-          ]  
+	import sys  
+	sys.path[0:0] = [  
+		 '/some/thing1.egg',  
+			  # and other things  
+			]  
 
 # What is  the need of Buildout ??
-		  It is in a very basic sense a package manager a-la virtual environment that gives isolates you 
-		  from os packaging. No matter what OS you develop on and what OS you deploy too.
+	It is in a very basic sense a package manager a-la virtual environment that gives isolates you 
+	from os packaging. No matter what OS you develop on and what OS you deploy too.
 
 
 
@@ -35,7 +35,7 @@ This does not end here ! I have to eggify my repo, how do you do this ? But befo
 	In lay man language Eggs are to Python as JARS are tp JAVA or .debs are to Debian and
 	RPMs to Fedora. Its basically a package manager,a way of bundling additional information
 	with a Python project that allows projects dependecies to be checked and satisfied at runtime
-	. The general packaged file format for distributing eggs is **.egg** zip file format.
+	The general packaged file format for distributing eggs is **.egg** zip file format.
 
 	More on Python eggs can be read at <http://peak.telecommunity.com/DevCenter/PythonEggs>
 
@@ -45,8 +45,7 @@ The next step was to include my code in the buildout, integrating it with rest o
 
 
 2. Added in the <eggs> section the name of my repo:
-
-* eggs =
+	eggs =
     pyramid
     oerpub.rhaptoslabs.swordpushweb
     oerpub.rhaptoslabs.sword1cnx
