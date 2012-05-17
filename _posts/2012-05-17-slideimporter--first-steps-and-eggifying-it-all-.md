@@ -53,7 +53,7 @@ The next step was to include my code in the buildout, integrating it with rest o
     oerpub.rhaptoslabs.latex2cnxml
     oerpub.rhaptoslabs.slideimporter
     rhaptos.cnxmlutils
-    sword2 *
+    sword2 
   
 3. Added my repository to *buildout.cfg* this way : In the [sources] part Add this line :  
 
