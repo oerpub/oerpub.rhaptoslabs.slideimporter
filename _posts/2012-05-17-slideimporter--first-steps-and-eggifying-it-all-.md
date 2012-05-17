@@ -37,14 +37,12 @@ This does not end here ! I have to eggify my repo, how do you do this ? But befo
 	with a Python project that allows projects dependecies to be checked and satisfied at runtime
 	The general packaged file format for distributing eggs is **.egg** zip file format.
 
-	More on Python eggs can be read at <http://peak.telecommunity.com/DevCenter/PythonEggs>
+More on Python eggs can be read at <http://peak.telecommunity.com/DevCenter/PythonEggs>
 
 	
-The next step was to include my code in the buildout, integrating it with rest of swordpushweb/
+The next step was to include my code in the buildout, integrating it with rest of swordpushweb/  
 1. I created a new branch on the swordpushweb-buildout repo : *git checkout -b gsoc2012*  
-
-
-2. Added in the <eggs> section the name of my repo:
+2. Added in the <eggs> section the name of my repo:  
 	eggs =
     pyramid
     oerpub.rhaptoslabs.swordpushweb
@@ -57,15 +55,15 @@ The next step was to include my code in the buildout, integrating it with rest o
     rhaptos.cnxmlutils
     sword2 *
   
-3. Added my repository to *buildout.cfg* this way : In the [sources] part Add this line :
+3. Added my repository to *buildout.cfg* this way : In the [sources] part Add this line :  
 
-*oerpub.rhaptoslabs.slideimporter = git git://github.com/oerpub/oerpub.rhaptoslabs.slideimporter.git*
+*oerpub.rhaptoslabs.slideimporter = git git://github.com/oerpub/oerpub.rhaptoslabs.slideimporter.git*  
 
-4.You are almost there , now follow the README at :  <https://github.com/oerpub/oerpub.rhaptoslabs.swordpushweb-buildout/blob/master/README.rst>
+4.You are almost there , now follow the README at :  <https://github.com/oerpub/oerpub.rhaptoslabs.swordpushweb-buildout/blob/master/README.rst>  
 
 
-My next post would be on how I added a *Hello World* for my repo !
-
+My next post would be on how I added a *Hello World* for my repo !  
+Special Thanks to Marvin and Rijk for theri help !
 
 
 
