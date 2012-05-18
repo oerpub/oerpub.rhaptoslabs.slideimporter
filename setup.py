@@ -35,6 +35,7 @@ setup(name='oerpub.rhaptoslabs.slideimporter',
       zip_safe=False,
       install_requires=[
           'setuptools',
+          'BeutifulSoup',
           # -*- Extra requirements: -*-
       ],
       entry_points="""
