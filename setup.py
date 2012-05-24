@@ -35,7 +35,9 @@ setup(name='oerpub.rhaptoslabs.slideimporter',
       zip_safe=False,
       install_requires=[
           'setuptools',
-          'BeautifulSoup',
+          'BeautifulSoup==3.2.1',
+          'MultipartPostHandler==0.1.0',
+          'gdata==2.0.17',
           # -*- Extra requirements: -*-
       ],
       entry_points="""

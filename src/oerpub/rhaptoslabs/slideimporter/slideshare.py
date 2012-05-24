@@ -1,9 +1,78 @@
 import urllib, urllib2
-#from xml2dict import fromstring
 import  time
 import sha
 import sys
+import os
+import stat
+import mimetools, mimetypes
+from cStringIO import StringIO
 from BeautifulSoup import BeautifulSoup
+
+class Callable:
+    def __init__(self, anycallable):
+        self.__call__ = anycallable
+
+# Controls how sequences are uncoded. If true, elements may be given multiple values by
+#  assigning a sequence.
+doseq = 1
+
+class MultipartPostHandler(urllib2.BaseHandler):
+    handler_order = urllib2.HTTPHandler.handler_order - 10 # needs to run first
+
+    def http_request(self, request):
+        data = request.get_data()
+        if data is not None and type(data) != str:
+            v_files = []
+            v_vars = []
+            try:
+                 for(key, value) in data.items():
+                     if type(value) == file:
+                         v_files.append((key, value))
+                     else:
+                         v_vars.append((key, value))
+            except TypeError:
+                systype, value, traceback = sys.exc_info()
+                raise TypeError, "not a valid non-string sequence or mapping object", traceback
+
+            if len(v_files) == 0:
+                data = urllib.urlencode(v_vars, doseq)
+            else:
+                boundary, data = self.multipart_encode(v_vars, v_files)
+
+                contenttype = 'multipart/form-data; boundary=%s' % boundary
+                if(request.has_header('Content-Type')
+                   and request.get_header('Content-Type').find('multipart/form-data') != 0):
+                    print "Replacing %s with %s" % (request.get_header('content-type'), 'multipart/form-data')
+                request.add_unredirected_header('Content-Type', contenttype)
+            request.add_data(data)       
+        return request
+
+    def multipart_encode(vars, files, boundary = None, buf = None):
+        if boundary is None:
+            boundary = mimetools.choose_boundary()
+        if buf is None:
+            buf = StringIO()
+        for(key, value) in vars:
+            buf.write('--%s\r\n' % boundary)
+            buf.write('Content-Disposition: form-data; name="%s"' % key)
+            buf.write('\r\n\r\n' + str(value) + '\r\n')
+        for(key, fd) in files:
+            file_size = os.fstat(fd.fileno())[stat.ST_SIZE]
+            filename = fd.name.split('/')[-1]
+            contenttype = mimetypes.guess_type(filename)[0] or 'application/octet-stream'
+            buf.write('--%s\r\n' % boundary)
+            buf.write('Content-Disposition: form-data; name="%s"; filename="%s"\r\n' % (key, filename))
+            buf.write('Content-Type: %s\r\n' % contenttype)
+            # buffer += 'Content-Length: %s\r\n' % file_size
+            fd.seek(0)
+            buf.write('\r\n' + fd.read() + '\r\n')
+        buf.write('--' + boundary + '--\r\n\r\n')
+        buf = buf.getvalue()
+        return boundary, buf
+    multipart_encode = Callable(multipart_encode)
+    https_request = http_request
+    
+
 class SlideShareApi:
     def __init__(self,params_as_dict,proxy=None):
         if ('api_key' not in params_as_dict) or ('api_secret' not in params_as_dict):
@@ -22,14 +91,17 @@ class SlideShareApi:
         if self.use_proxy:
             self.setup_proxy()
 
-    def set_api_parameters(self,**args):
+    def set_api_parameters(self,encode = True, **args):
         timestamp = int(time.time())
         all_params = {'api_key' : self.params['api_key'],'ts' :
                 timestamp,'hash' : sha.new(self.params['api_secret'] + str(timestamp)).hexdigest()}
         for argument in args:
-            all_params[argument] = args[argument]
-
-        return urllib.urlencode(all_params)
+			if argument != 'slideshare_src':
+				all_params[argument] = args[argument]
+        if encode:
+            return urllib.urlencode(all_params)
+        else:
+            return all_params
     
     def setup_proxy(self):
        
@@ -45,17 +117,31 @@ class SlideShareApi:
         data = urllib2.urlopen(url,params).read()
         soup = BeautifulSoup(data)
         return soup
+    def upload_slideshow(self,username,password,title,src_file):
+        upload_params ={ 'username':username,
+                         'password':password, 
+                         'slideshow_title':title,
+                         'slideshow_srcfile':src_file }
+        params =  self.set_api_parameters(encode = False,username=username,password=password,slideshow_title=title,slideshow_srcfile=src_file)
+        params['slideshow_srcfile'] = open(src_file, 'rb')        
+        opener = urllib2.build_opener(MultipartPostHandler) # Use our custom post handler which supports unicode
+        data = opener.open("http://www.slideshare.net/api/2/upload_slideshow", params).read()
+        print data
+        #print data.read()
+        
 
 def main(username="saketkc"):
     ss_api = SlideShareApi({"api_key":"oQO2stCt", "api_secret":"CnaNZzxx"})
-    soup = ss_api.get_slideshow_by_user(username)
-    output = ""
-    for index,slideshow in enumerate(soup.findAll('slideshow')):
-        title = slideshow.find('title').string
-        url = slideshow.find('url').string
-        downloadurl = slideshow.find('downloadurl').string
-        output += str(index+1) + ". " + title + "\n URL: " + url + "\n Download Url : " + downloadurl
-    print output
+    soup = ss_api.upload_slideshow('saketkc','fedora','Test','Connexions.pdf')
+    #print soup.prettify()
+    #soup = ss_api.get_slideshow_by_user(username)
+    #output = ""
+    #for index,slideshow in enumerate(soup.findAll('slideshow')):
+        #title = slideshow.find('title').string
+        #url = slideshow.find('url').string
+        #downloadurl = slideshow.find('downloadurl').string
+        #output += str(index+1) + ". " + title + "\n URL: " + url + "\n Download Url : " + downloadurl
+    #return output
 
 if __name__ == "__main__":
     main()

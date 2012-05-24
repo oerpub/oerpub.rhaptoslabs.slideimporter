@@ -11,3 +11,5 @@ src/oerpub.rhaptoslabs.slideimporter.egg-info/requires.txt
 src/oerpub.rhaptoslabs.slideimporter.egg-info/top_level.txt
 src/oerpub/rhaptoslabs/__init__.py
 src/oerpub/rhaptoslabs/slideimporter/__init__.py
+src/oerpub/rhaptoslabs/slideimporter/slideshare.py
+src/oerpub/rhaptoslabs/slideimporter/test.py
