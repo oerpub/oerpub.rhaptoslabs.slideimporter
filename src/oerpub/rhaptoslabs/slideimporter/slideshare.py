@@ -130,9 +130,10 @@ class SlideShareApi:
         #print data.read()
         
 
-def main(username="saketkc"):
+def main(username,filepath):
     ss_api = SlideShareApi({"api_key":"oQO2stCt", "api_secret":"CnaNZzxx"})
-    soup = ss_api.upload_slideshow('saketkc','fedora','Test','Connexions.pdf')
+    soup = ss_api.upload_slideshow('saketkc','fedora','Test',filepath)
+    return soup
     #print soup.prettify()
     #soup = ss_api.get_slideshow_by_user(username)
     #output = ""
@@ -144,4 +145,4 @@ def main(username="saketkc"):
     #return output
 
 if __name__ == "__main__":
-    main()
+    main("saketkc","/home/saket/presentation.ppt")

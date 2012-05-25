@@ -46,12 +46,18 @@ class GooglePresentationUploader:
 		self.update_entry = self.client.update(self.entry,force=True)
 	def get_embed_url(self):
 		s = """<iframe src="https://docs.google.com/presentation/embed?id="""+self.resource_id+"""&start=false&loop=false&delayms=3000" frameborder="0" width="1058" height="823" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>"""
-		print s
+		return s
 
+
+def upload_to_googledocs(username,password,filepath):
+	presentation = GooglePresentationUploader("saketkc","howdoyoudothis1314.")
+	presentation.upload("/home/saket/Downloads/presentation.ppt")
+	presentation.get_resource_id()
+	presentation.get_first_revision_feed()
+	presentation.publish_presentation_on_web()
+	return presentation.get_embed_url()
+
+	
 if __name__ == "__main__":
-	a = GooglePresentationUploader("saketkc","howdoyoudothis1314.")
-	a.upload("/home/saket/Downloads/presentation.ppt")
-	a.get_resource_id()
-	a.get_first_revision_feed()
-	a.publish_presentation_on_web()
-	a.get_embed_url()
+	upload_to_googledocs("saketkc","howdoyoudothis1314.","test")
+	
