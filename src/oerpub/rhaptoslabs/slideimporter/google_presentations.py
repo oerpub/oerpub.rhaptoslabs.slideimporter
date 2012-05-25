@@ -21,19 +21,20 @@ class GooglePresentationUploader:
 		self.file_size = os.fstat(self.fd.fileno())[stat.ST_SIZE]
 		self.filename = self.fd.name.split('/')[-1]
 		self.file_type = mimetypes.guess_type(self.filename)[0] or 'application/octet-stream'
-		self.media = gdata.data.MediaSource()
-		self.media.SetFileHandle(filepath, self.file_type)
-		self.new_presentation_resource = gdata.docs.data.Resource(filepath, self.filename)
-		self.new_presentation = self.client.CreateResource(self.new_presentation_resource, create_uri=gdata.docs.client.RESOURCE_UPLOAD_URI, media=self.media)
+		self.media = gdata.data.MediaSource(file_path=filepath,content_type=self.file_type)
+		self.new_presentation =  self.client.Upload(self.media,self.filename)
+		#self.media.SetFileHandle(filepath, self.file_type)   #gdata = 2.0.17
+		#self.new_presentation_resource = gdata.docs.data.Resource(filepath, self.filename) #gdata = 2.0.17
+		#self.new_presentation = self.client.CreateResource(self.new_presentation_resource, create_uri=gdata.docs.client.RESOURCE_UPLOAD_URI, media=self.media) #gdata = 2.0.17
 
 # Is there a better way to get the reource id ?, This originaly returnds  'presentaion : id'
 	def get_resource_id(self):
-		self.resource_id = self.new_presentation.resource_id.text.split(':')[1] 
+		self.resource_id = self.new_presentation.resource_id.text
 		return self.resource_id
 
 	def get_revision_feeds(self):
-		self.resource = self.client.GetResourceById(self.get_resource_id())
-		self.revision_feeds = self.client.GetRevisions(self.resource)
+		#self.resource = self.client.GetDoc(self.get_resource_id()) #gdata = 2.0.17
+		self.revision_feeds = self.client.GetRevisions(self.resource_id)
 
 # We havn't edited the PPT so just fetching the first revision
 	def get_first_revision_feed(self):
@@ -50,7 +51,7 @@ class GooglePresentationUploader:
 
 
 def upload_to_googledocs(username,password,filepath):
-	presentation = GooglePresentationUploader("saketkc","howdoyoudothis1314.")
+	presentation = GooglePresentationUploader(username,password)
 	presentation.upload("/home/saket/Downloads/presentation.ppt")
 	presentation.get_resource_id()
 	presentation.get_first_revision_feed()
@@ -59,5 +60,5 @@ def upload_to_googledocs(username,password,filepath):
 
 	
 if __name__ == "__main__":
-	upload_to_googledocs("saketkc","howdoyoudothis1314.","test")
+	upload_to_googledocs("","","")
 	

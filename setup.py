@@ -33,11 +33,14 @@ setup(name='oerpub.rhaptoslabs.slideimporter',
       namespace_packages=['oerpub', 'oerpub.rhaptoslabs'],
       include_package_data=True,
       zip_safe=False,
+      dependency_links = [
+                    'http://code.google.com/p/gdata-python-client/downloads/list'
+                          ],
       install_requires=[
           'setuptools',
           'BeautifulSoup==3.2.1',
           'MultipartPostHandler==0.1.0',
-          'gdata==2.0.17',
+          'gdata==2.0.14',
           # -*- Extra requirements: -*-
       ],
       entry_points="""
