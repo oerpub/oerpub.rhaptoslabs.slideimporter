@@ -2,8 +2,6 @@ import urllib, urllib2
 import  time
 import sha
 import sys
-import os
-import stat
 import mimetools, mimetypes
 from cStringIO import StringIO
 from BeautifulSoup import BeautifulSoup
@@ -44,7 +42,7 @@ class MultipartPostHandler(urllib2.BaseHandler):
                    and request.get_header('Content-Type').find('multipart/form-data') != 0):
                     print "Replacing %s with %s" % (request.get_header('content-type'), 'multipart/form-data')
                 request.add_unredirected_header('Content-Type', contenttype)
-            request.add_data(data)       
+            request.add_data(data)
         return request
 
     def multipart_encode(vars, files, boundary = None, buf = None):
@@ -57,7 +55,6 @@ class MultipartPostHandler(urllib2.BaseHandler):
             buf.write('Content-Disposition: form-data; name="%s"' % key)
             buf.write('\r\n\r\n' + str(value) + '\r\n')
         for(key, fd) in files:
-            file_size = os.fstat(fd.fileno())[stat.ST_SIZE]
             filename = fd.name.split('/')[-1]
             contenttype = mimetypes.guess_type(filename)[0] or 'application/octet-stream'
             buf.write('--%s\r\n' % boundary)
@@ -71,7 +68,7 @@ class MultipartPostHandler(urllib2.BaseHandler):
         return boundary, buf
     multipart_encode = Callable(multipart_encode)
     https_request = http_request
-    
+
 
 class SlideShareApi:
     def __init__(self,params_as_dict,proxy=None):
@@ -80,7 +77,7 @@ class SlideShareApi:
             return 0
         if proxy:
             self.use_proxy = True
-            if not istnstance(proxy,dict):
+            if not isinstance(proxy,dict):
                 print >> sys.stderr," Proxy Config should be a dictionary"
                 return 0
             self.proxy = proxy
@@ -102,14 +99,14 @@ class SlideShareApi:
             return urllib.urlencode(all_params)
         else:
             return all_params
-    
+
     def setup_proxy(self):
-       
-        urllib2.ProxyHandler({'http':'http://%(username)s:%(password)s@%(host)s:%(port)s'%self.proxy})
+
+        proxy_support = urllib2.ProxyHandler({'http':'http://%(username)s:%(password)s@%(host)s:%(port)s'%self.proxy})
         proxy_opener = urllib2.build_opener(proxy_support, urllib2.HTTPHandler)
         urllib2.install_opener(proxy_opener)
 
- 
+
 
     def get_slideshow_by_user(self,username_for):
         params = self.set_api_parameters()
@@ -118,22 +115,20 @@ class SlideShareApi:
         soup = BeautifulSoup(data)
         return soup
     def upload_slideshow(self,username,password,title,src_file):
-        upload_params ={ 'username':username,
-                         'password':password, 
-                         'slideshow_title':title,
-                         'slideshow_srcfile':src_file }
         params =  self.set_api_parameters(encode = False,username=username,password=password,slideshow_title=title,slideshow_srcfile=src_file)
-        params['slideshow_srcfile'] = open(src_file, 'rb')        
+        params['slideshow_srcfile'] = open(src_file, 'rb')
         opener = urllib2.build_opener(MultipartPostHandler) # Use our custom post handler which supports unicode
         data = opener.open("http://www.slideshare.net/api/2/upload_slideshow", params).read()
-        print data
-        #print data.read()
-        
+        return data
+
 
 def upload_to_slideshare(username,filepath):
     ss_api = SlideShareApi({"api_key":"oQO2stCt", "api_secret":"CnaNZzxx"})
-    soup = ss_api.upload_slideshow('saketkc','fedora','Test',filepath)
-    return soup
+    filepath = filepath.replace("\\","/")
+    filename = filepath.split('/')[-1]
+    uploadname = filename.split('.')[0]
+    soup = BeautifulSoup(ss_api.upload_slideshow('saketkc','fedora',uploadname,filepath))
+    return soup.find('slideshowid').string
     #print soup.prettify()
     #soup = ss_api.get_slideshow_by_user(username)
     #output = ""
@@ -145,4 +140,4 @@ def upload_to_slideshare(username,filepath):
     #return output
 
 if __name__ == "__main__":
-    upload_to_slideshare("saketkc","/home/saket/presentation.ppt")
+    print upload_to_slideshare("saketkc","/home/saket/Downloads/ch1.ppt")
