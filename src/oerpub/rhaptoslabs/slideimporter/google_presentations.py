@@ -1,21 +1,24 @@
 import gdata.docs.data
 import gdata.docs.client
 import gdata.docs.service
-import sys
 import gdata.client
 import gdata.docs.client
 import os
 import stat
-import mimetools, mimetypes
-import time
-import atom
+import  mimetypes
+from google_api_config import CONSUMER_KEY
+from google_api_config import CONSUMER_SECRET
 class GooglePresentationUploader:
-	def __init__(self,username,password):
+	def __init__(self):
 		self.client = gdata.docs.client.DocsClient(source='connexions')
 		self.client.api_version = "3"
 		self.client.ssl = True
-		self.client.ClientLogin(username, password, self.client.source)
-	
+        self.outh_call_backurl = 'http://localhost:6543/oauth2callback'
+        self.scopes =  ['https://docs.google.com/feeds/ https://docs.googleusercontent.com/']
+
+
+		#self.client.ClientLogin(username, password, self.client.source)
+
 	def upload(self,filepath):
 		self.fd = open(filepath,"r")
 		self.file_size = os.fstat(self.fd.fileno())[stat.ST_SIZE]
@@ -31,6 +34,29 @@ class GooglePresentationUploader:
 	def get_resource_id(self):
 		self.resource_id = self.new_presentation.resource_id.text
 		return self.resource_id
+	def get_oauth_token_from_google(self):
+		self.saved_request_token = self.client.GetOAuthToken(self.scopes, self.oauth_callback_url, CONSUMER_KEY, consumer_secret=CONSUMER_SECRET)
+
+	def get_authorization_url_from_google(self):
+		return self.saved_request_token.generate_authorization_url()
+
+	def authorize_request_token(self,uri):
+		self.request_token = gdata.gauth.AuthorizeRequestToken(self.saved_request_token, uri)
+
+	def get_access_token(self):
+		self.access_token = self.client.GetAccessToken(self.request_token)
+		return self.access_token
+
+	def get_token_key(self):
+		return self.access_token.token
+
+	def get_token_secret(self):
+		return self.access_token.token_secret
+
+	def authentincate_client_with_oauth2(self):
+		TOKEN_KEY = self.get_token_key()
+		TOKEN_SECRET = self.get_token_secret()
+		self.client.auth_token = gdata.gauth.OAuthHmacToken(CONSUMER_KEY, CONSUMER_SECRET, TOKEN_KEY, TOKEN_SECRET, gdata.gauth.ACCESS_TOKEN, next=None, verifier=None)
 
 	def get_revision_feeds(self):
 		#self.resource = self.client.GetDoc(self.get_resource_id()) #gdata = 2.0.17
@@ -50,15 +76,15 @@ class GooglePresentationUploader:
 		return s
 
 
-def upload_to_googledocs(username,password,filepath):
-	presentation = GooglePresentationUploader(username,password)
+def upload_to_googledocs(oauth_token,oauth_token_secret,filepath):
+	presentation = GooglePresentationUploader()
 	presentation.upload("/home/saket/Downloads/presentation.ppt")
 	presentation.get_resource_id()
 	presentation.get_first_revision_feed()
 	presentation.publish_presentation_on_web()
 	return presentation.get_embed_url()
 
-	
+
 if __name__ == "__main__":
 	upload_to_googledocs("","","")
-	
+
