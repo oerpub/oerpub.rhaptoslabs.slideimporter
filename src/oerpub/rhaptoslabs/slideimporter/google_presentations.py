@@ -10,9 +10,9 @@ from google_api_config import CONSUMER_KEY
 from google_api_config import CONSUMER_SECRET
 
 
-class GoogleOAuth(self):
+class GoogleOAuth:
 	
-	def __init__(self,request_token=null):		
+	def __init__(self,request_token=''):		
 		self.client = gdata.docs.client.DocsClient(source='connexions')
 		self.client.api_version = "3"
 		self.client.ssl = True
@@ -22,7 +22,7 @@ class GoogleOAuth(self):
 	
 
 	def set_oauth_callback_url(self,url='http://localhost:6543/oauth2callback'):
-		self.outh_call_backurl = url
+		self.oauth_callback_url = url
 		
 	def get_oauth_token_from_google(self):
 		self.saved_request_token = self.client.GetOAuthToken(self.scopes, self.oauth_callback_url, CONSUMER_KEY, consumer_secret=CONSUMER_SECRET)
@@ -100,13 +100,6 @@ class GooglePresentationUploader:
 		return s
 
 
-def authenticate_user_with_oauth(callback=False):
-	oauth = GoogleOAuth()
-	if callback:
-	
-	else:
-		
-		oauth = GoogleOAuth.
 
 def upload_to_googledocs(oauth_token,oauth_token_secret,filepath):
 	presentation = GooglePresentationUploader()
