@@ -17,8 +17,7 @@ class GoogleOAuth:
 		self.client.api_version = "3"
 		self.client.ssl = True
 		self.scopes =  ['https://docs.google.com/feeds/ https://docs.googleusercontent.com/']
-		if request_token:
-			self.saved_request_token = request_token
+		
 	
 
 	def set_oauth_callback_url(self,url='http://localhost:6543/oauth2callback'):
@@ -26,12 +25,13 @@ class GoogleOAuth:
 		
 	def get_oauth_token_from_google(self):
 		self.saved_request_token = self.client.GetOAuthToken(self.scopes, self.oauth_callback_url, CONSUMER_KEY, consumer_secret=CONSUMER_SECRET)
+		return self.saved_request_token
 
 	def get_authorization_url_from_google(self):
 		return self.saved_request_token.generate_authorization_url()
 
-	def authorize_request_token(self,uri):
-		self.request_token = gdata.gauth.AuthorizeRequestToken(self.saved_request_token, uri)
+	def authorize_request_token(self,saved_request_token,uri):
+		self.request_token = gdata.gauth.AuthorizeRequestToken(saved_request_token, uri)
 
 	def get_access_token(self):
 		self.access_token = self.client.GetAccessToken(self.request_token)
@@ -82,7 +82,9 @@ class GooglePresentationUploader:
 	
 	def get_revision_feeds(self):
 		#self.resource = self.client.GetDoc(self.get_resource_id()) #gdata = 2.0.17
+		self.get_resource_id()
 		self.revision_feeds = self.client.GetRevisions(self.resource_id)
+		return self.revision_feeds
 
 # We havn't edited the PPT so just fetching the first revision
 	def get_first_revision_feed(self):
