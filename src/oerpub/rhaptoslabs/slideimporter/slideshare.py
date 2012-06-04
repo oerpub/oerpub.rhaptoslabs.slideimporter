@@ -114,26 +114,12 @@ class SlideShareApi:
         data = urllib2.urlopen(url,params).read()
         soup = BeautifulSoup(data)
         return soup
-	def upload_slideshow(self,username,password,title,src_file):
+    def upload_slideshow(self,username,password,title,src_file):
         params =  self.set_api_parameters(encode = False,username=username,password=password,slideshow_title=title,slideshow_srcfile=src_file)
         params['slideshow_srcfile'] = open(src_file, 'rb')
         opener = urllib2.build_opener(MultipartPostHandler) # Use our custom post handler which supports unicode
         data = opener.open("http://www.slideshare.net/api/2/upload_slideshow", params).read()
         return data
-	def get_slideshow_info(self,slideshow_id):
-		params = self.set_api_parameters(encode=True,slideshow_id=str(slideshow_id))
-		data = urllib2.urlopen("http://www.slideshare.net/api/2/get_slideshow", params).read()
-		soup = BeautifulSoup(data)
-		status = soup.find('status').string
-		if status == '0':
-			return "Queed for Conversion"
-		elif status == '1':
-			return "In Conversion Factory"
-		elif status == '2':
-			return soup.find('embed').string
-		elif status == '3':
-		return "FAiled to Upload"
-			
 
 
 
@@ -145,11 +131,6 @@ def upload_to_slideshare(username,filepath):
     uploadname = filename.split('.')[0]
     soup = BeautifulSoup(ss_api.upload_slideshow('saketkc','fedora',uploadname,filepath))
     return soup.find('slideshowid').string
-  
-def show_slideshow(slideshow_id):
-	ss_api = SlideShareApi({"api_key":"oQO2stCt", "api_secret":"CnaNZzxx"})
-	return ss_api.get_slideshow_info(slideshow_id)
-	
     #print soup.prettify()
     #soup = ss_api.get_slideshow_by_user(username)
     #output = ""
