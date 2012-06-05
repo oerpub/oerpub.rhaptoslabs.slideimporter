@@ -127,14 +127,7 @@ class SlideShareApi:
 		data = urllib2.urlopen("http://www.slideshare.net/api/2/get_slideshow", params).read()
 		soup = BeautifulSoup(data)
 		status = soup.find('status').string
-		if status == '0':
-			return "Queed for Conversion"
-		elif status == '1':
-			return "In Conversion Factory"
-		elif status == '2':
-			return soup.find('embed').string
-		elif status == '3':
-			return "Failed to Upload"
+		return status
 			
 
 
