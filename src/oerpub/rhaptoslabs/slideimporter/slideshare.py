@@ -128,7 +128,7 @@ class SlideShareApi:
 		soup = BeautifulSoup(data)
 		status = soup.find('status').string
 		return status
-	def get_detailed_info(slideshow_id):
+    def get_detailed_info(self,slideshow_id):
 		params = self.set_api_parameters(encode=True,slideshow_id=str(slideshow_id),detailed=1)
 		data = urllib2.urlopen("http://www.slideshare.net/api/2/get_slideshow", params).read()
 		soup = BeautifulSoup(data)
@@ -139,7 +139,7 @@ def get_number_of_slides(soup):
 	return soup.find('numslides').string
 		
 def get_download_link(soup):
-	return soup.find('pptlocalion').string
+	return soup.find('downloadurl').string
 
 def get_slideshow_status(soup):
 	return soup.find('status').string
@@ -155,7 +155,7 @@ def show_slideshow(slideshow_id):
 	ss_api = SlideShareApi({"api_key":"oQO2stCt", "api_secret":"CnaNZzxx"})
 	return ss_api.get_slideshow_info(slideshow_id)
 
-def get_detais(slideshow_id):
+def get_details(slideshow_id):
 	ss_api = SlideShareApi({"api_key":"oQO2stCt", "api_secret":"CnaNZzxx"})
 	return ss_api.get_detailed_info(slideshow_id)
 	
