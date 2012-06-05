@@ -120,9 +120,29 @@ class SlideShareApi:
         opener = urllib2.build_opener(MultipartPostHandler) # Use our custom post handler which supports unicode
         data = opener.open("http://www.slideshare.net/api/2/upload_slideshow", params).read()
         return data
+    
+    
+    def get_slideshow_info(self,slideshow_id):
+		params = self.set_api_parameters(encode=True,slideshow_id=str(slideshow_id))
+		data = urllib2.urlopen("http://www.slideshare.net/api/2/get_slideshow", params).read()
+		soup = BeautifulSoup(data)
+		status = soup.find('status').string
+		if status == '0':
+			return "Queed for Conversion"
+		elif status == '1':
+			return "In Conversion Factory"
+		elif status == '2':
+			return soup.find('embed').string
+		elif status == '3':
+			return "Failed to Upload"
+			
 
 
 
+
+def show_slideshow(slideshow_id):
+	ss_api = SlideShareApi({"api_key":"oQO2stCt", "api_secret":"CnaNZzxx"})
+	return ss_api.get_slideshow_info(slideshow_id)
 
 def upload_to_slideshare(username,filepath):
     ss_api = SlideShareApi({"api_key":"oQO2stCt", "api_secret":"CnaNZzxx"})
