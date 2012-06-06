@@ -38,8 +38,7 @@ The full code that got it working is here :
 
 The other Challenge was to do similar stuff for Google Presentatios : 
 
-I am just writing the code for it , will update this post later to talk about the logic(I have it on a different workstation and forgot to git add it :p)
-
+I am just writing the code for it , will update this post later to talk about the logic(I have it on a different workstation and forgot to git add it :p):
 <https://gist.github.com/288107>
 
 
