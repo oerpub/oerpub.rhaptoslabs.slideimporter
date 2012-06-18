@@ -1,0 +1,10 @@
+#!/media/data/Project/GSOC/oerpub.rhaptoslabs.slideimporter/test-zopeskel/bin/python
+# EASY-INSTALL-ENTRY-SCRIPT: 'templer.core==1.0b3','console_scripts','templer'
+__requires__ = 'templer.core==1.0b3'
+import sys
+from pkg_resources import load_entry_point
+
+if __name__ == '__main__':
+    sys.exit(
+        load_entry_point('templer.core==1.0b3', 'console_scripts', 'templer')()
+    )

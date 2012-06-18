@@ -1,0 +1,5 @@
+
+      # -*- Entry points: -*-
+      [paste.paster_create_template]
+      basic_zope = templer.zope:BasicZope
+      

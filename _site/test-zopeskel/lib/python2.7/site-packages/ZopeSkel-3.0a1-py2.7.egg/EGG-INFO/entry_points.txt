@@ -1,0 +1,4 @@
+
+      [console_scripts]
+      zopeskel = templer.core.zopeskel_script:run
+      

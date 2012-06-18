@@ -1,0 +1,7 @@
+setuptools
+templer.core
+
+[test]
+Cheetah
+PasteScript
+templer.core

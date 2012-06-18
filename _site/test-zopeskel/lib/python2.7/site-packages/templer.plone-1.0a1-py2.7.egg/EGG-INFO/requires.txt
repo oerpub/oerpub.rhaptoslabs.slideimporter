@@ -1,0 +1,11 @@
+setuptools
+templer.core
+templer.buildout
+templer.zope
+
+[test]
+Cheetah
+PasteScript
+templer.core
+templer.buildout
+templer.zope

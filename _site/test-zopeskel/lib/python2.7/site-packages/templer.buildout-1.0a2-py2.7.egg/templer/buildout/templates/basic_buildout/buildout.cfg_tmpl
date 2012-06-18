@@ -1,0 +1,10 @@
+[buildout]
+parts = 
+    templer
+
+[templer]
+recipe = zc.recipe.egg
+eggs = 
+    PasteScript
+    templer.core
+    

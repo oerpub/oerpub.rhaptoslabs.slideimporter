@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+	<channel>
+		<title>Slide Importer Client using the OERPub publishing API</title>
+		<description>GSoC 2012 Idea</description>
+		<link>http://oerpub.github.com/oerpub.rhaptoslabs.slideimporter/</link>
+		
+			<item>
+				<title>Import to Slideshare, Google OAuth2 Pains and Misc </title>
+				<description>&lt;p&gt;I completed the complete UI flow for importing to SlideShare &lt;a href='http://www.slideshare.net'&gt;http://www.slideshare.net&lt;/a&gt; . The UI flow is like this :(I will be referring to the user as &lt;em&gt;he&lt;/em&gt; henceforth) 1. User logs in to Connexions &lt;a href='http://www.cnx.org'&gt;http://www.cnx.org&lt;/a&gt;. To import a slide from his desktop he is directed to the http://www.cnx.org/slideshare_importer page.&lt;/p&gt;
+&lt;img src='http://oerpub.github.com/oerpub.rhaptoslabs.slideimporter/assets/images/view1.png' /&gt;
+&lt;ol&gt;
+&lt;li&gt;User can choose from PPT/PPTX/ODT presentation from his workstation and click &amp;#8216;Import&amp;#8217; . The presenation will get deposited in Connexions and will be queued for Conversion at SlideShare.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;img src='http://oerpub.github.com/oerpub.rhaptoslabs.slideimporter/assets/images/view2.png' /&gt;
+&lt;ol&gt;
+&lt;li&gt;As SlideShare processes Slideshows in batches, there is generally a lag of 20 minutes before the SlideShow get s converted at the SLideSHare End. The view looks like this : &lt;img src='http://oerpub.github.com/oerpub.rhaptoslabs.slideimporter/assets/images/view3.png' /&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;The user can click on &lt;em&gt;Refresh Status&lt;/em&gt; to check if the slideshow has been converted&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;Once the Slideshow conversion is complete, it appears on the page as an oembed iframe and a download link to download the original slides appear near it&lt;/li&gt;
+&lt;/ol&gt;
+&lt;img src='http://oerpub.github.com/oerpub.rhaptoslabs.slideimporter/assets/images/view4.png' /&gt;
+&lt;p&gt;The full code that got it working is here : &lt;a href='https://gist.github.com/2881036'&gt;https://gist.github.com/2881036&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;The other Challenge was to do similar stuff for Google Presentatios :&lt;/p&gt;
+
+&lt;p&gt;I am just writing the code for it , will update this post later to talk about the logic(I have it on a different workstation and forgot to git add it :p): &lt;a href='https://gist.github.com/288107'&gt;https://gist.github.com/288107&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Saket&lt;/p&gt;</description>
+				<published>Wed Jun 06 00:00:00 +0100 2012</published>
+				<link>http://oerpub.github.com/oerpub.rhaptoslabs.slideimporter//2012/06/06/import-to-slideshare-google-oauth2-pains-and-misc</link>
+			</item>
+		
+			<item>
+				<title>Slideimporter : First Steps and Eggifying it all ! </title>
+				<description>&lt;p&gt;After struggling for quiet a time with getting used to Pyramid framework, I finally could get started with it. I could finally add a new page to the current oerpub.swordpush.buildout&lt;/p&gt;
+
+&lt;h1 id='what_is_buildout_'&gt;What is buildout ?&lt;/h1&gt;
+
+&lt;p&gt;Buildout is used for &lt;strong&gt;deploying applications&lt;/strong&gt; and the possibly needed dependecies in a repeatable way. It is possible that the dependecies may not be just Python eggs. In short it acts like an importer for all the egg. Si once you do a buiild out (I will be explaining this steps shortly) the files that come up in the &lt;strong&gt;bin&lt;/strong&gt; directory will have a path defined something like this&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;import sys  
+sys.path[0:0] = [  
+	 &amp;#39;/some/thing1.egg&amp;#39;,  
+		  # and other things  
+		]  &lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id='what_is_the_need_of_buildout_'&gt;What is the need of Buildout ??&lt;/h1&gt;
+
+&lt;pre&gt;&lt;code&gt;It is in a very basic sense a package manager a-la virtual environment that gives isolates you 
+from os packaging. No matter what OS you develop on and what OS you deploy too.&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Now I had to create a new repo for my GSoC 2012 project, which sits here : &lt;a href='https://github.com/oerpub/oerpub.rhaptoslabs.slideimporter'&gt;https://github.com/oerpub/oerpub.rhaptoslabs.slideimporter&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;This does not end here ! I have to eggify my repo, how do you do this ? But before that :&lt;/p&gt;
+
+&lt;h1 id='what_does_eggifying_your_source_code_mean_'&gt;What does eggifying your source code mean ?&lt;/h1&gt;
+
+&lt;pre&gt;&lt;code&gt;In lay man language Eggs are to Python as JARS are tp JAVA or .debs are to Debian and
+RPMs to Fedora. Its basically a package manager,a way of bundling additional information
+with a Python project that allows projects dependecies to be checked and satisfied at runtime
+The general packaged file format for distributing eggs is **.egg** zip file format.&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;More on Python eggs can be read at &lt;a href='http://peak.telecommunity.com/DevCenter/PythonEggs'&gt;http://peak.telecommunity.com/DevCenter/PythonEggs&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;The next step was to include my code in the buildout, integrating it with rest of swordpushweb/&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;I created a new branch on the swordpushweb-buildout repo : &lt;em&gt;git checkout -b gsoc2012&lt;/em&gt;&lt;/p&gt;
+&lt;/li&gt;
+
+&lt;li&gt;
+&lt;p&gt;Added in the &lt;span&gt;eggs&lt;/span&gt; section the name of my repo:&lt;br /&gt;eggs = pyramid oerpub.rhaptoslabs.swordpushweb oerpub.rhaptoslabs.sword1cnx oerpub.rhaptoslabs.sword2cnx oerpub.rhaptoslabs.cnxml2htmlpreview oerpub.rhaptoslabs.html_gdocs2cnxml oerpub.rhaptoslabs.latex2cnxml oerpub.rhaptoslabs.slideimporter rhaptos.cnxmlutils sword2&lt;/p&gt;
+&lt;/li&gt;
+
+&lt;li&gt;
+&lt;p&gt;Added my repository to &lt;em&gt;buildout.cfg&lt;/em&gt; this way : In the &lt;span&gt;sources&lt;/span&gt; part Add this line :&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;&lt;em&gt;oerpub.rhaptoslabs.slideimporter = git git://github.com/oerpub/oerpub.rhaptoslabs.slideimporter.git&lt;/em&gt;&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;You are almost there , now follow the README at : &lt;a href='https://github.com/oerpub/oerpub.rhaptoslabs.swordpushweb-buildout/blob/master/README.rst'&gt;https://github.com/oerpub/oerpub.rhaptoslabs.swordpushweb-buildout/blob/master/README.rst&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;My next post would be on how I added a &lt;em&gt;Hello World&lt;/em&gt; for my repo !&lt;br /&gt;Special Thanks to Marvin and Rijk for theri help !&lt;/p&gt;</description>
+				<published>Thu May 17 00:00:00 +0100 2012</published>
+				<link>http://oerpub.github.com/oerpub.rhaptoslabs.slideimporter//2012/05/17/slideimporter--first-steps-and-eggifying-it-all-</link>
+			</item>
+		
+			<item>
+				<title>Hello Connexions! </title>
+				<description>&lt;p&gt;This is my first blog post or GSoC 2012. I would like to thank my mentors Kathi and Marvin for helping me throughout the process of proposal submission, guiding me at each step .&lt;/p&gt;
+
+&lt;p&gt;I plan to build a web client to import slides into Connexions and upload them to a service like SlideShare or Google Docs to render them as embeds. The client should be able to create a module template with introductory paragraphs and should be uploaded to Connexions using the publishing API. Slides should be printable and should be compatible to mobile/tablet views.&lt;/p&gt;</description>
+				<published>Fri Apr 27 00:00:00 +0100 2012</published>
+				<link>http://oerpub.github.com/oerpub.rhaptoslabs.slideimporter//2012/04/27/hello-connexions</link>
+			</item>
+		
+	</channel>
+</rss>

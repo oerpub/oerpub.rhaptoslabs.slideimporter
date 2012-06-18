@@ -1,0 +1,44 @@
+=======================
+basic_buildout template
+=======================
+
+The basic buildout template creates a simple, no-frills buildout suitable for 
+extending in any way the user sees fit.  As it is a buildout, and not an egg,
+there are no restrictions on the name provided for the package.  
+
+Create a buildout with a simple name::
+
+    >>> paster('create -t basic_buildout mybuild --no-interactive')
+    paster create -t basic_buildout mybuild --no-interactive
+    ...
+
+Let's be sure that the package we just created exists and has the right name::
+    >>> ls('.')
+    mybuild
+
+The buildout should contain nothing but the bootstrap.py file and a 
+buildout.cfg::
+
+    >>> ls('.', 'mybuild')
+    bootstrap.py
+    buildout.cfg
+
+We should also be able to create a buildout with one or more dots in its name::
+
+    >>> paster('create -t recipe my.buildout --no-interactive')
+    paster create -t recipe my.buildout --no-interactive
+    ...
+    >>> paster('create -t recipe my.nifty.buildout --no-interactive')
+    paster create -t recipe my.nifty.buildout --no-interactive
+    ...
+    >>> paster('create -t recipe my.ultra.super.fantastic.buildout --no-interactive')
+    paster create -t recipe my.ultra.super.fantastic.buildout --no-interactive
+    ...
+    >>> ls('.')
+    my.buildout
+    my.nifty.buildout
+    my.ultra.super.fantastic.buildout
+    mybuild
+
+
+    

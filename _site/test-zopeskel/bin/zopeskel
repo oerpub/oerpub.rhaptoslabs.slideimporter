@@ -1,0 +1,10 @@
+#!/media/data/Project/GSOC/oerpub.rhaptoslabs.slideimporter/test-zopeskel/bin/python
+# EASY-INSTALL-ENTRY-SCRIPT: 'ZopeSkel==3.0a1','console_scripts','zopeskel'
+__requires__ = 'ZopeSkel==3.0a1'
+import sys
+from pkg_resources import load_entry_point
+
+if __name__ == '__main__':
+    sys.exit(
+        load_entry_point('ZopeSkel==3.0a1', 'console_scripts', 'zopeskel')()
+    )
