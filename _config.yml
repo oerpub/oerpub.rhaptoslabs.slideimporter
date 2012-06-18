@@ -125,3 +125,6 @@ JB :
   #   ./_includes/custom/[HELPER]
   # where [HELPER] is the name of the helper you are overriding.
   
+name:  Slide Importer Client using the OERPub publishing API
+description: GSoC 2012 Idea
+url: http://oerpub.github.com/oerpub.rhaptoslabs.slideimporter/
