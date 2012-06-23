@@ -144,7 +144,7 @@ def get_transcript(soup):
     try:
         return soup.find('transcript').string
     except:
-        raise SlideShowDoesNotExistError("Error getting transcript")
+        return ""
 
 def show_slideshow(slideshow_id):
     ss_api = SlideShareApi({"api_key":"oQO2stCt", "api_secret":"CnaNZzxx"})
@@ -166,6 +166,8 @@ def get_slideshow_download_url(soup):
 def get_embed_code(soup):
     return soup.find('embed').string
 
+
+
 def upload_to_slideshare(username,filepath):
     ss_api = SlideShareApi({"api_key":"oQO2stCt", "api_secret":"CnaNZzxx"})
     filepath = filepath.replace("\\","/")
@@ -178,5 +180,6 @@ if __name__ == "__main__":
     ss = upload_to_slideshare("saketkc","/home/saket/Downloads/Training_Authoring.ppt")   
     x = get_details(ss)
     print x
+    print get_slideshow_download_url(x)
     #print get_download_link(x)
     #print get_ppt_location(x)
