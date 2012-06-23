@@ -9,14 +9,12 @@ from BeautifulSoup import BeautifulSoup
 class Callable:
     def __init__(self, anycallable):
         self.__call__ = anycallable
-
-# Controls how sequences are uncoded. If true, elements may be given multiple values by
-#  assigning a sequence.
-doseq = 1
-
+class SlideShowDoesNotExistError(Exception):
+    def __init__(self,message):
+        self.message = message
 class MultipartPostHandler(urllib2.BaseHandler):
-    handler_order = urllib2.HTTPHandler.handler_order - 10 # needs to run first
-
+    handler_order = urllib2.HTTPHandler.handler_order - 10 
+    
     def http_request(self, request):
         data = request.get_data()
         if data is not None and type(data) != str:
@@ -36,7 +34,6 @@ class MultipartPostHandler(urllib2.BaseHandler):
                 data = urllib.urlencode(v_vars, doseq)
             else:
                 boundary, data = self.multipart_encode(v_vars, v_files)
-
                 contenttype = 'multipart/form-data; boundary=%s' % boundary
                 if(request.has_header('Content-Type')
                    and request.get_header('Content-Type').find('multipart/form-data') != 0):
@@ -59,8 +56,7 @@ class MultipartPostHandler(urllib2.BaseHandler):
             contenttype = mimetypes.guess_type(filename)[0] or 'application/octet-stream'
             buf.write('--%s\r\n' % boundary)
             buf.write('Content-Disposition: form-data; name="%s"; filename="%s"\r\n' % (key, filename))
-            buf.write('Content-Type: %s\r\n' % contenttype)
-            # buffer += 'Content-Length: %s\r\n' % file_size
+            buf.write('Content-Type: %s\r\n' % contenttype)            
             fd.seek(0)
             buf.write('\r\n' + fd.read() + '\r\n')
         buf.write('--' + boundary + '--\r\n\r\n')
@@ -93,20 +89,17 @@ class SlideShareApi:
         all_params = {'api_key' : self.params['api_key'],'ts' :
                 timestamp,'hash' : sha.new(self.params['api_secret'] + str(timestamp)).hexdigest()}
         for argument in args:
-			if argument != 'slideshare_src':
-				all_params[argument] = args[argument]
+            if argument != 'slideshare_src':
+                all_params[argument] = args[argument]
         if encode:
             return urllib.urlencode(all_params)
         else:
             return all_params
 
     def setup_proxy(self):
-
         proxy_support = urllib2.ProxyHandler({'http':'http://%(username)s:%(password)s@%(host)s:%(port)s'%self.proxy})
         proxy_opener = urllib2.build_opener(proxy_support, urllib2.HTTPHandler)
         urllib2.install_opener(proxy_opener)
-
-
 
     def get_slideshow_by_user(self,username_for):
         params = self.set_api_parameters()
@@ -114,51 +107,58 @@ class SlideShareApi:
         data = urllib2.urlopen(url,params).read()
         soup = BeautifulSoup(data)
         return soup
+        
     def upload_slideshow(self,username,password,title,src_file):
         params =  self.set_api_parameters(encode = False,username=username,password=password,slideshow_title=title,slideshow_srcfile=src_file)
         params['slideshow_srcfile'] = open(src_file, 'rb')
-        opener = urllib2.build_opener(MultipartPostHandler) # Use our custom post handler which supports unicode
+        opener = urllib2.build_opener(MultipartPostHandler)
         data = opener.open("http://www.slideshare.net/api/2/upload_slideshow", params).read()
-        return data
-    
+        return data    
     
     def get_slideshow_info(self,slideshow_id):
-		params = self.set_api_parameters(encode=True,slideshow_id=str(slideshow_id))
-		data = urllib2.urlopen("http://www.slideshare.net/api/2/get_slideshow", params).read()
-		soup = BeautifulSoup(data)
-		status = soup.find('status').string
-		return status
+        params = self.set_api_parameters(encode=True,slideshow_id=str(slideshow_id))
+        data = urllib2.urlopen("http://www.slideshare.net/api/2/get_slideshow", params).read()
+        soup = BeautifulSoup(data)
+        status = soup.find('status').string
+        return status
+        
     def get_detailed_info(self,slideshow_id):
-		params = self.set_api_parameters(encode=True,slideshow_id=str(slideshow_id),detailed=1)
-		data = urllib2.urlopen("http://www.slideshare.net/api/2/get_slideshow", params).read()
-		soup = BeautifulSoup(data)
-		return soup
-
+        params = self.set_api_parameters(encode=True,slideshow_id=str(slideshow_id),detailed=1,get_transcript=1)
+        data = urllib2.urlopen("http://www.slideshare.net/api/2/get_slideshow", params).read()
+        soup = BeautifulSoup(data)
+        return soup      
 
 def get_number_of_slides(soup):
-	return soup.find('numslides').string
-		
+    return soup.find('numslides').string
+    
 def get_download_link(soup):
-	return soup.find('downloadurl').string
+    try:
+        return soup.find('downloadurl').string
+    except:
+        SlideShowDoesNotExistError("No Download link generated yet")        
 
 def get_slideshow_status(soup):
-	return soup.find('status').string
-	
-		
-		
-			
+    return soup.find('status').string
 
-
-
+def get_transcript(soup):
+    try:
+        return soup.find('transcript').string
+    except:
+        raise SlideShowDoesNotExistError("Error getting transcript")
 
 def show_slideshow(slideshow_id):
-	ss_api = SlideShareApi({"api_key":"oQO2stCt", "api_secret":"CnaNZzxx"})
-	return ss_api.get_slideshow_info(slideshow_id)
+    ss_api = SlideShareApi({"api_key":"oQO2stCt", "api_secret":"CnaNZzxx"})
+    return ss_api.get_slideshow_info(slideshow_id)
 
 def get_details(slideshow_id):
-	ss_api = SlideShareApi({"api_key":"oQO2stCt", "api_secret":"CnaNZzxx"})
-	return ss_api.get_detailed_info(slideshow_id)
-	
+    ss_api = SlideShareApi({"api_key":"oQO2stCt", "api_secret":"CnaNZzxx"})
+    return ss_api.get_detailed_info(slideshow_id)
+
+def get_ppt_location(soup):
+    return soup.find('pptlocation').string    
+
+def get_stripped_title(soup):
+    return soup.find('strippedtitle').string        
 
 def upload_to_slideshare(username,filepath):
     ss_api = SlideShareApi({"api_key":"oQO2stCt", "api_secret":"CnaNZzxx"})
@@ -167,15 +167,10 @@ def upload_to_slideshare(username,filepath):
     uploadname = filename.split('.')[0]
     soup = BeautifulSoup(ss_api.upload_slideshow('saketkc','fedora',uploadname,filepath))
     return soup.find('slideshowid').string
-    #print soup.prettify()
-    #soup = ss_api.get_slideshow_by_user(username)
-    #output = ""
-    #for index,slideshow in enumerate(soup.findAll('slideshow')):
-        #title = slideshow.find('title').string
-        #url = slideshow.find('url').string
-        #downloadurl = slideshow.find('downloadurl').string
-        #output += str(index+1) + ". " + title + "\n URL: " + url + "\n Download Url : " + downloadurl
-    #return output
-
+    
 if __name__ == "__main__":
-    print upload_to_slideshare("saketkc","/home/saket/Downloads/ch1.ppt")
+    ss = upload_to_slideshare("saketkc","/home/saket/Downloads/Training_Authoring.ppt")   
+    x = get_details(ss)
+    print x
+    print get_download_link(x)
+    print get_ppt_location(x)
