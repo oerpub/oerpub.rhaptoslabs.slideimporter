@@ -158,7 +158,13 @@ def get_ppt_location(soup):
     return soup.find('pptlocation').string    
 
 def get_stripped_title(soup):
-    return soup.find('strippedtitle').string        
+    return soup.find('strippedtitle').string  
+    
+def get_slideshow_download_url(soup):
+    return soup.find('url').string + "/download"
+    
+def get_embed_code(soup):
+    return soup.find('embed').string
 
 def upload_to_slideshare(username,filepath):
     ss_api = SlideShareApi({"api_key":"oQO2stCt", "api_secret":"CnaNZzxx"})
@@ -172,5 +178,5 @@ if __name__ == "__main__":
     ss = upload_to_slideshare("saketkc","/home/saket/Downloads/Training_Authoring.ppt")   
     x = get_details(ss)
     print x
-    print get_download_link(x)
-    print get_ppt_location(x)
+    #print get_download_link(x)
+    #print get_ppt_location(x)
