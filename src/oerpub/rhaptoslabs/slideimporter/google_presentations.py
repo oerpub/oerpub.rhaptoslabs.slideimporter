@@ -46,7 +46,7 @@ class GoogleOAuth:
                                         client_secret='',
                                         scope=self.scopes,
                                         user_agent='cnx.testing')
-        print token.generate_authorize_url()
+        return token.generate_authorize_url()
         #code = raw_input('What is the verification code? ').strip()
         #token.get_access_token(code)
         #print token.refresh_token
