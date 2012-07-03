@@ -15,7 +15,7 @@ class GoogleOAuth:
         self.client = gdata.docs.client.DocsClient(source='connexions')
         self.client.api_version = "3"
         self.client.ssl = True
-        self.scopes =  ['https://docs.google.com/feeds/ https://docs.googleusercontent.com/ https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile']
+        self.scopes =  ['https://docs.google.com/feeds/ https://docs.googleusercontent.com/']
 
     def set_oauth_callback_url(self,url='http://localhost:6543/oauth2callback'):
         self.oauth_callback_url = url
