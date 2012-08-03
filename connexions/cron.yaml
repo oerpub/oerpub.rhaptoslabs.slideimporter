@@ -1,4 +1,0 @@
-cron:
-- description: mailing the job
-  url: /mail
-  schedule: every 2 minutes
