@@ -175,7 +175,11 @@ def upload_to_slideshare(username,filepath):
     uploadname = filename.split('.')[0]
     soup = BeautifulSoup(ss_api.upload_slideshow('saketkc','fedora',uploadname,filepath))
     return soup.find('slideshowid').string
-    
+def fetch_slideshow_status(slideshow_id):
+	ss_api = SlideShareApi({"api_key":"oQO2stCt", "api_secret":"CnaNZzxx"})
+	return ss_api.get_slideshow_info(slideshow_id)
+	
+	
 if __name__ == "__main__":
     ss = upload_to_slideshare("saketkc","/home/saket/Downloads/Training_Authoring.ppt")   
     x = get_details(ss)
