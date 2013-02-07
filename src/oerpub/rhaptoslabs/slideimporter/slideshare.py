@@ -103,7 +103,7 @@ class SlideShareApi:
 
     def get_slideshow_by_user(self,username_for):
         params = self.set_api_parameters()
-        url = "http://www.slideshare.net/api/2/get_slideshows_by_user?username_for=" + str(username_for)
+        url = "https://www.slideshare.net/api/2/get_slideshows_by_user?username_for=" + str(username_for)
         data = urllib2.urlopen(url,params).read()
         soup = BeautifulSoup(data)
         return soup
@@ -112,19 +112,19 @@ class SlideShareApi:
         params =  self.set_api_parameters(encode = False,username=username,password=password,slideshow_title=title,slideshow_srcfile=src_file)
         params['slideshow_srcfile'] = open(src_file, 'rb')
         opener = urllib2.build_opener(MultipartPostHandler)
-        data = opener.open("http://www.slideshare.net/api/2/upload_slideshow", params).read()
+        data = opener.open("https://www.slideshare.net/api/2/upload_slideshow", params).read()
         return data    
     
     def get_slideshow_info(self,slideshow_id):
         params = self.set_api_parameters(encode=True,slideshow_id=str(slideshow_id))
-        data = urllib2.urlopen("http://www.slideshare.net/api/2/get_slideshow", params).read()
+        data = urllib2.urlopen("https://www.slideshare.net/api/2/get_slideshow", params).read()
         soup = BeautifulSoup(data)
         status = soup.find('status').string
         return status
         
     def get_detailed_info(self,slideshow_id):
         params = self.set_api_parameters(encode=True,slideshow_id=str(slideshow_id),detailed=1,get_transcript=1)
-        data = urllib2.urlopen("http://www.slideshare.net/api/2/get_slideshow", params).read()
+        data = urllib2.urlopen("https://www.slideshare.net/api/2/get_slideshow", params).read()
         soup = BeautifulSoup(data)
         return soup      
 

@@ -1,6 +1,7 @@
 *~ 
 *.pyc 
 oerpub.rhaptoslabs.slideimporter.egg-info/ 
+src/oerpub.rhaptoslabs.slideimporter.egg-info/
 oerpub/rhaptoslabs/slideimporter/transforms/* 
 !oerpub/rhaptoslabs/slideimporter/transforms/README 
 oerpub/rhaptoslabs/data/
