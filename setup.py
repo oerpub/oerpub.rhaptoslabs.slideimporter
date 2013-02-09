@@ -41,7 +41,7 @@ setup(name='oerpub.rhaptoslabs.slideimporter',
           'BeautifulSoup==3.2.1',
           'MultipartPostHandler==0.1.0',
           'gdata==2.0.14',
-          'MySQL-python'
+          'MySQL-python==1.2.4'
           # -*- Extra requirements: -*-
       ],
       entry_points="""
