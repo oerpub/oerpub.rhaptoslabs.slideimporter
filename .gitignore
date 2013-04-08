@@ -1,5 +1,5 @@
 *~ 
-*.pyc 
+*.py[cod]
 oerpub.rhaptoslabs.slideimporter.egg-info/ 
 src/oerpub.rhaptoslabs.slideimporter.egg-info/
 oerpub/rhaptoslabs/slideimporter/transforms/* 
